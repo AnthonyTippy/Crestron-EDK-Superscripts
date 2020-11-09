@@ -1,4 +1,4 @@
-﻿1### Crestron Toyota SuperScript V1.0  
+﻿1### Crrestron Firmware Upgrade Superscript
 ###Script will call IP addresses from list and try to upgrade firmware version bas
 
 # make sure the PSCrestron Cmdlets are loaded into PowerShell
