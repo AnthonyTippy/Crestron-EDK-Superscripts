@@ -5,30 +5,31 @@ This powershell script requires fairly little modification and can be used to ga
 
 # Get-Started
 1. Download and install the Crestron Powershell EDK 
-Non-Crestron Link: https://crestron-edk.software.informer.com/download/
+-Non-Crestron Link: https://crestron-edk.software.informer.com/download/
 
 2. Set your username and password
-$cUsername = "USERNAME"
-$cPassword = "PASSWORD"
+-$cUsername = "USERNAME"
+-$cPassword = "PASSWORD"
 
 3. Set the name of your IP.txt list
-$deviceList = Get-Content (Join-Path $PSScriptRoot 'IP.txt')
+-$deviceList = Get-Content (Join-Path $PSScriptRoot 'IP.txt')
 
 4. Paste IP addresses in IP.txt file (make sure there's no whitespace after the IP's as it can cause issues)
 
 5. Run the script!
 
-NOTE: The script is not perfect and can take some time, but I've tried to provide as much updates regarding the processes it runs to show progress.  
+#### NOTE: The script is not perfect and can take some time, but I've tried to provide as much updates regarding the processes it runs to show progress.  
 
-Here's the exact flow of the script
+# Here's the exact flow of the script
 
 1. Script attempts to connect /authenticate to device in IP list via the following methods (in order)
--SSH with username/password provided
--SSH crestron default password
--SSH admin/admin credentials
--If port 22 not open, it tries to connect via CTP admin admin
--If port 41795 is not open and all above methods have failed, script displays "error connecting" message and logs it appropriately
-Additionally, during this process the script runs "Get-VersionInfo" which provides a wealth of information about the device such as Model #, serial #, mac address, firmware version, compile date...etc
+- SSH with username/password provided
+- SSH crestron default password
+- SSH admin/admin credentials
+- If port 22 not open, it tries to connect via CTP admin admin
+- If port 41795 is not open and all above methods have failed, script displays "error connecting" message and logs it appropriately
+
+#### Additionally, during this process the script runs "Get-VersionInfo" which provides a wealth of information about the device such as Model #, serial #, mac address, firmware version, compile date...etc
 
 2. Once the script is able to connect to the device, script will open a crestron session with the device based on the successful authentication method
 
