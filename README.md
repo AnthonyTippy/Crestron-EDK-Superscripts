@@ -4,16 +4,19 @@ Crestron Powershell script to pull device information and issue commands to many
 This powershell script requires fairly little modification and can be used to gather information on hundreds of crestron devices on a network across multiple subnets.
 
 # Get-Started
-1. Set your username and password
+1. Download and install the Crestron Powershell EDK 
+Non-Crestron Link: https://crestron-edk.software.informer.com/download/
+
+2. Set your username and password
 $cUsername = "USERNAME"
 $cPassword = "PASSWORD"
 
-2. Set the name of your IP.txt list
+3. Set the name of your IP.txt list
 $deviceList = Get-Content (Join-Path $PSScriptRoot 'IP.txt')
 
-3. Paste IP addresses in IP.txt file (make sure there's no whitespace after the IP's as it can cause issues)
+4. Paste IP addresses in IP.txt file (make sure there's no whitespace after the IP's as it can cause issues)
 
-4. Run the script!
+5. Run the script!
 
 NOTE: The script is not perfect and can take some time, but I've tried to provide as much updates regarding the processes it runs to show progress.  
 
@@ -38,3 +41,7 @@ Additionally, during this process the script runs "Get-VersionInfo" which provid
 5. Once completed, the script reports back total time for the script. 
 Error log output file can be found in same directory as script under SuperScript ERROR LOG.txt
 
+
+# More information about the crestron powershell module
+-https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/Modules/CrestronSession-Module.htm
+-https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/PSCrestron.htm#Get-VersionInfo
