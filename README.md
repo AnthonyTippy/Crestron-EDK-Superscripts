@@ -42,6 +42,14 @@ This powershell script requires fairly little modification and can be used to ga
 5. Once completed, the script reports back total time for the script. 
 Error log output file can be found in same directory as script under SuperScript ERROR LOG.txt
 
+# Firmware Upgrader
+FirmwareUpgrader.ps1 is a secondary script that uses much of the same functionality as the superscript to initialize firmware upgrades across many devices on an IP list.
+
+1. Download firmware file to be sent to devices to the same file location as script
+2. Rename the variable "$FW" with the file name to be sent [FW = (Join-Path $PSScriptRoot 'tsw-xx60_2.009.0122.001.puf')]
+3. Rename firmware file name [$fname = 'tsw-xx60_2.009.0122.00.puf']
+4. Run script!
+
 
 # More information about the crestron powershell module
 https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/Modules/CrestronSession-Module.htm
