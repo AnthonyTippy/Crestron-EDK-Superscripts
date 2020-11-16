@@ -1,6 +1,24 @@
 ﻿1### Crrestron Firmware Upgrade Superscript
 ###Script will call IP addresses from list and try to upgrade firmware version bas
 
+write-host @" 
+
+  ______ _                                        _    _                           _           
+ |  ____(_)                                      | |  | |                         | |          
+ | |__   _ _ __ _ __ _____      ____ _ _ __ ___  | |  | |_ __   __ _ _ __ __ _  __| | ___ _ __ 
+ |  __| | | '__| '_ ` _ \ \ /\ / / _` | '__/ _ \ | |  | | '_ \ / _` | '__/ _` |/ _` |/ _ \ '__|
+ | |    | | |  | | | | | \ V  V / (_| | | |  __/ | |__| | |_) | (_| | | | (_| | (_| |  __/ |   
+ |_|    |_|_|  |_| |_| |_|\_/\_/ \__,_|_|  \___|  \____/| .__/ \__, |_|  \__,_|\__,_|\___|_|   
+                                                        | |     __/ |                          
+                                                        |_|    |___/                           
+    Written By: Anthony Tippy
+
+
+
+                                                                                                                                                           
+"@
+
+
 # make sure the PSCrestron Cmdlets are loaded into PowerShell
 Import-Module PSCrestron
 
@@ -151,3 +169,4 @@ $ResultsTable | Select-Object -Property "Device", "Hostname", "Prompt", "Serial"
 
 #Total time of script
 $stopwatch
+Read-Host -Prompt “Press Enter to exit”
