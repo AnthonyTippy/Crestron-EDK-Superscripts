@@ -42,6 +42,15 @@ This powershell script requires fairly little modification and can be used to ga
 5. Once completed, the script reports back total time for the script. 
 Error log output file can be found in same directory as script under SuperScript ERROR LOG.txt
 
+# CrestFinder
+CrestFinder.ps1 is a secondary script that utilizes the Read-Autodiscovery EDK function.  This script reaches out to device IP's from a text file and broadcasts out to other crestron devices on the same subnet.  This script helps to find other devices you may not know about based on a pre-existing IP list.
+
+1.  Paste IP.txt list in root directory of script
+2.  Change IP list name in script (to match name of your IP list)
+3.  Run script
+
+Script runs much quicker than superscript and returns IP address, Hostname, Device Model Info, Firmware version, compile date, and mac address.
+
 # Firmware Upgrader
 FirmwareUpgrader.ps1 is a secondary script that uses much of the same functionality as the superscript to initialize firmware upgrades across many devices on an IP list.
 
