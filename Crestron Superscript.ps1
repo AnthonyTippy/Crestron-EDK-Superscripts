@@ -1,8 +1,34 @@
 ﻿### Crestron SuperScript V1.0  By Anthony Tippy
 ###Script will call IP addresses from list and gather device information as well as program and DHCP state data
 
-###NOTE: You will need to edit the username and password ($cusername $cpassword) as well as the IP list name under $devicelist 
+###NOTE: You will need to edit the username and password ($cusername $cpassword) as well as the IP list name under $devicelist
 
+write-host @"  
+
+
+
+ ██████╗██████╗ ███████╗███████╗████████╗██████╗  ██████╗ ███╗   ██╗                 
+██╔════╝██╔══██╗██╔════╝██╔════╝╚══██╔══╝██╔══██╗██╔═══██╗████╗  ██║                 
+██║     ██████╔╝█████╗  ███████╗   ██║   ██████╔╝██║   ██║██╔██╗ ██║                 
+██║     ██╔══██╗██╔══╝  ╚════██║   ██║   ██╔══██╗██║   ██║██║╚██╗██║                 
+╚██████╗██║  ██║███████╗███████║   ██║   ██║  ██║╚██████╔╝██║ ╚████║                 
+ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝                 
+                                                                                     
+███████╗██╗   ██╗██████╗ ███████╗██████╗ ███████╗ ██████╗██████╗ ██╗██████╗ ████████╗
+██╔════╝██║   ██║██╔══██╗██╔════╝██╔══██╗██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝
+███████╗██║   ██║██████╔╝█████╗  ██████╔╝███████╗██║     ██████╔╝██║██████╔╝   ██║   
+╚════██║██║   ██║██╔═══╝ ██╔══╝  ██╔══██╗╚════██║██║     ██╔══██╗██║██╔═══╝    ██║   
+███████║╚██████╔╝██║     ███████╗██║  ██║███████║╚██████╗██║  ██║██║██║        ██║   
+╚══════╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   
+                                                                                     
+                                                        
+
+    Written By: Anthony Tippy
+
+
+
+                                                                                                                                                           
+"@
 # make sure the PSCrestron Cmdlets are loaded into PowerShell
 Import-Module PSCrestron
 
@@ -146,3 +172,5 @@ $ResultsTable | Select-Object -Property "Device", "Hostname", "Prompt", "Serial"
 
 #Total time of script
 $stopwatch
+
+Read-Host -Prompt “Press Enter to exit”
