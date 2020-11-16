@@ -1,0 +1,68 @@
+###Crestron Device Discovery Script
+###Script will call IP addresses from list and gather device information via autodiscovery 
+write-host @"  
+
+
+
+ ██████╗██████╗ ███████╗███████╗████████╗███████╗██╗███╗   ██╗██████╗ ███████╗██████╗ 
+██╔════╝██╔══██╗██╔════╝██╔════╝╚══██╔══╝██╔════╝██║████╗  ██║██╔══██╗██╔════╝██╔══██╗
+██║     ██████╔╝█████╗  ███████╗   ██║   █████╗  ██║██╔██╗ ██║██║  ██║█████╗  ██████╔╝
+██║     ██╔══██╗██╔══╝  ╚════██║   ██║   ██╔══╝  ██║██║╚██╗██║██║  ██║██╔══╝  ██╔══██╗
+╚██████╗██║  ██║███████╗███████║   ██║   ██║     ██║██║ ╚████║██████╔╝███████╗██║  ██║
+ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   ╚═╝     ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝
+                                                                                      
+
+    Written By: Anthony Tippy
+
+
+
+
+
+                                                                                                                                                           
+"@
+
+# make sure the PSCrestron Cmdlets are loaded into PowerShell
+Import-Module PSCrestron
+
+#Stopwatch feature
+$stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+
+# declare an object to hold the results table
+$ResultsTable =@()
+
+
+#load IP from TXT list (INSERT YOUR IP LIST NAME)
+$deviceList = Get-Content (Join-Path $PSScriptRoot 'IPLIST.txt')
+
+# for each device in the devicelist
+foreach ($dev in $deviceList) {
+
+        #Device Discovery for each IP in text file
+        write-host $dev 'Trying Autodiscovery'
+        $dVersionInfo = Read-AutoDiscovery $dev  -ErrorAction "SilentlyContinue"
+        write-host " " 
+
+
+        # Add entry to the table
+        #-----------------------
+        $ResultsTable += $dVersionInfo
+
+        }
+       
+
+#Gridview Output
+$ResultsTable | Out-GridView
+
+#Output RAW TXT file
+$ResultsTable | Out-File (Join-Path $PSScriptRoot 'Discovery RAW Output.txt')
+
+#Output to Formatted CSV
+$ResultsTable | Select-Object -Property "Device", "IP", "Hostname", "Description"| Export-Csv -Path $PSScriptRoot\"CrestFinder Results.csv" -NoTypeInformation
+
+write-host "Outputted csv file WILL contain duplicates!!  Don't forget to remove duplicates in excel!!!"
+
+#Total time of script
+$stopwatch
+
+
+Read-Host -Prompt “Press Enter to exit”
