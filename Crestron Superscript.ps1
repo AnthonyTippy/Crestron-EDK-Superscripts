@@ -81,13 +81,6 @@ try {
             $cMethod = "CTP"
         }
 
-        <#if($dVersionInfo.ErrorMessage.Contains("Failed to find port 41795 open."))   #device doesn't support ssh, try CTP
-        {   write-host $dev 'Trying CTP MTR password'
-            $dVersionInfo = Get-VersionInfo -Device $dev -Username "admin" -Password "sfb" -erroraction 'silentlycontinue'
-            $cMethod = "MTR CTP"
-            Write-Host $dVersionInfo
-        }#>
-
         if($dVersionInfo.ErrorMessage.Contains("Failed to find port 41795 open"))   #device doesn't support ssh, try CTP
         {   write-host $dev 'Could not Connect'
             $cMethod = "ERROR"
