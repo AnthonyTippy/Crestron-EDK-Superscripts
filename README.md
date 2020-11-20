@@ -59,6 +59,19 @@ FirmwareUpgrader.ps1 is a secondary script that uses much of the same functional
 3. Rename firmware file name [$fname = 'tsw-xx60_2.009.0122.00.puf']
 4. Run script!
 
+# DHCP Killer
+DHCP Killer is a script to automate the process of turning off DHCP and setting the ethernet settings to static.
+
+1.  Paste IP.txt list in root directory of script
+2.  Change IP list name in script (to match name of your IP list)
+3.  Edit DNS variables to desired IP's (defaults to googles DNS)
+4.  Run script
+
+- Script will filter import ip list and filter through device IP's
+- script will pull device IP info (IP address, subnet mask, gateway) 
+- script then sets device ethernet settings to static matching previously gathered info
+- script disables DHCP
+- Your device should have the same IP address it started with, but set to static
 
 # More information about the crestron powershell module
 https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/Modules/CrestronSession-Module.htm
