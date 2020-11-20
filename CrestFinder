@@ -24,6 +24,9 @@ write-host @"
 # make sure the PSCrestron Cmdlets are loaded into PowerShell
 Import-Module PSCrestron
 
+#Reset Count
+$count = 0
+
 #Stopwatch feature
 $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
 
@@ -31,8 +34,9 @@ $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
 $ResultsTable =@()
 
 
-#load IP from TXT list (INSERT YOUR IP LIST NAME)
-$deviceList = Get-Content (Join-Path $PSScriptRoot 'IPLIST.txt')
+#load IP from TXT list
+$deviceList = Get-Content (Join-Path $PSScriptRoot 'IP.txt')
+
 
 # for each device in the devicelist
 foreach ($dev in $deviceList) {
@@ -42,27 +46,31 @@ foreach ($dev in $deviceList) {
         $dVersionInfo = Read-AutoDiscovery $dev  -ErrorAction "SilentlyContinue"
         write-host " " 
 
+        #Update Counter for each device
+        $count = $count + 1
 
         # Add entry to the table
         #-----------------------
         $ResultsTable += $dVersionInfo
 
         }
-       
+    
 
 #Gridview Output
 $ResultsTable | Out-GridView
 
 #Output RAW TXT file
-$ResultsTable | Out-File (Join-Path $PSScriptRoot 'Discovery RAW Output.txt')
+$ResultsTable | Out-File (Join-Path $PSScriptRoot 'Device Discovery RAW Output.txt')
 
 #Output to Formatted CSV
 $ResultsTable | Select-Object -Property "Device", "IP", "Hostname", "Description"| Export-Csv -Path $PSScriptRoot\"CrestFinder Results.csv" -NoTypeInformation
 
 write-host "Outputted csv file WILL contain duplicates!!  Don't forget to remove duplicates in excel!!!"
 
+#Report Count of Devices
+write-host 'Total Devices Queried: ' $count
+
 #Total time of script
 $stopwatch
 
-
-Read-Host -Prompt “Press Enter to exit”
+#Read-Host -Prompt “Press Enter to exit”
