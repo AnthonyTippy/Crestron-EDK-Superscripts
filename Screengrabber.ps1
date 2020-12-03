@@ -1,5 +1,22 @@
-﻿#Import PSCRESTRON MODULE
+write-host @"  
+
+
+
+███████╗ ██████╗██████╗ ███████╗███████╗███╗   ██╗     ██████╗ ██████╗  █████╗ ██████╗ ██████╗ ███████╗██████╗ 
+██╔════╝██╔════╝██╔══██╗██╔════╝██╔════╝████╗  ██║    ██╔════╝ ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝██╔══██╗
+███████╗██║     ██████╔╝█████╗  █████╗  ██╔██╗ ██║    ██║  ███╗██████╔╝███████║██████╔╝██████╔╝█████╗  ██████╔╝
+╚════██║██║     ██╔══██╗██╔══╝  ██╔══╝  ██║╚██╗██║    ██║   ██║██╔══██╗██╔══██║██╔══██╗██╔══██╗██╔══╝  ██╔══██╗
+███████║╚██████╗██║  ██║███████╗███████╗██║ ╚████║    ╚██████╔╝██║  ██║██║  ██║██████╔╝██████╔╝███████╗██║  ██║
+╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝     ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
+                                                                                                               
+
+           Written By: Anthony Tippy                                                                                                        
+
+"@
+
+#Import PSCRESTRON MODULE
 Import-Module PSCrestron
+
 
 #Count
 $devicerror= 0
@@ -7,7 +24,7 @@ $counterror= 0
 
 write-host " " 
 
-$IP = Read-Host "Please Enter Device IP: "
+#$IP = Read-Host "Please Enter Device IP: "
 
 $local = $PSScriptRoot
 
@@ -27,19 +44,18 @@ catch
 foreach ($d in $devs)
   {
     try {
-        
+        Write-host " "
         $DeviceResultItem = New-Object PSObject
-        
-	    Write-Host 'Grabbing Screenshot for:' $d
 
         $session = Open-CrestronSession -Device $d -secure
 
         $hostnameResponce = Invoke-CrestronSession $session "hostname"
         $deviceHostname = [regex]::Match($hostnameResponce, "(?<=Host\sName:\s)[\w-]+").value
 
-        Invoke-CrestronSession $session "screenshot $deviceHostname"
-        
-        Write-host " "
+        Write-Host 'Grabbing Screenshot for:' $d "==>" $deviceHostname
+
+        $screenshot= Invoke-CrestronSession $session "screenshot $deviceHostname"
+ 
 
         $Remotefile = ('logs\' + $deviceHostname + '.bmp')
   
@@ -48,8 +64,7 @@ foreach ($d in $devs)
         Close-CrestronSession $session
 
         Write-Host "Screenshot saved to: $local"
-        Write-Host "Direct Link to Screenshot : ftp://crestron@$d/logs/$deviceHostname.bmp"
-        write-host
+        #Write-Host "Direct Link to Screenshot : ftp://crestron@$d/logs/$deviceHostname.bmp"
         } 
 
     catch {
@@ -63,6 +78,8 @@ foreach ($d in $devs)
     }
   }
 
+write-host " "
+write-host " "
 write-host " "
 write-host 'Devices with Errors: '$counterror
 write-host " "
