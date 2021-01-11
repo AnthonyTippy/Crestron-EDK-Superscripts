@@ -18,16 +18,13 @@ This powershell script requires fairly little modification and can be used to ga
 
 5. Run the script!
 
-#### NOTE: The script is not perfect and can take some time, but I've tried to provide as much updates regarding the processes it runs to show progress.  
-
 # Here's the exact flow of the script
 
 1. Script attempts to connect /authenticate to device in IP list via the following methods (in order)
-- SSH with username/password provided
 - SSH crestron default password
-- SSH admin/admin credentials
+- SSH with username/password provided
 - If port 22 not open, it tries to connect via CTP admin admin
-- If port 41795 is not open and all above methods have failed, script displays "error connecting" message and logs it appropriately
+- If port 22 is not open and all above methods have failed, script displays "error connecting" message and logs it appropriately
 
 #### Additionally, during this process the script runs "Get-VersionInfo" which provides a wealth of information about the device such as Model #, serial #, mac address, firmware version, compile date...etc
 
@@ -40,7 +37,13 @@ This powershell script requires fairly little modification and can be used to ga
 4. Script adds gained information to the CSV output file and moves on to the next IP address on the list
 
 5. Once completed, the script reports back total time for the script. 
-Error log output file can be found in same directory as script under SuperScript ERROR LOG.txt
+
+This script is very efficient in its performance and can very quickly filter through hundreds of devices in minutes.
+
+# ScreenGrabber
+Screengrabber connectes to the devices in IP.txt, issues the screenshot command, names the screenshot taken after the device's hostname, transfers the screenshot to your PC via FTP and then deletes screenshot file from the device memory
+
+This script is really useful for checking the online status of MTR room touchpanels or Room Scheduler panels. 
 
 # CrestFinder
 CrestFinder.ps1 is a secondary script that utilizes the Read-Autodiscovery EDK function.  This script reaches out to device IP's from a text file and broadcasts out to other crestron devices on the same subnet.  This script helps to find other devices you may not know about based on a pre-existing IP list.
