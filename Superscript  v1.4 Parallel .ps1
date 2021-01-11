@@ -179,7 +179,7 @@ Close-CrestronSession $session
         #hostname
         $hostnameResponce = Invoke-CrestronSession $session "hostname"
         $deviceHostname = [regex]::Match($hostnameResponce, "(?<=Host\sName:\s)[\w-]+").value
-        Write-host -f Green "[Toyota Password] Working on => $deviceHostname" $d "`n`n`n" 
+        Write-host -f Green "[Custom Password] Working on => $deviceHostname" $d "`n`n`n" 
         write-output " "
         
         #ver
@@ -277,8 +277,6 @@ $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Val
 #Add line to the report
 $DeviceResultsData = $DeviceResultItem
 
-
-#$DeviceResultsData | Out-File -FILEPATH ("C:\Users\461194\Desktop\Crestron PS scripts\Paralell Superscript.txt") -Append
 $DeviceResultsData | export-csv -Path (".\desktop\Superscript Results.csv") -NoTypeInformation -Append
 
 Close-CrestronSession $session
@@ -316,7 +314,6 @@ Close-CrestronSession $session
             #Add line to the report
             $DeviceResultsData = $DeviceResultItem
 
-            #$DeviceResultsData | Out-File -FILEPATH ("C:\Users\461194\Desktop\Crestron PS scripts\Paralell Superscript.txt") -Append
             $DeviceResultsData | export-csv -Path (".\desktop\Superscript Results.csv") -NoTypeInformation -Append
             }
             }
