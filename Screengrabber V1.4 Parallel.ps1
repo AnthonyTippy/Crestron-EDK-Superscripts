@@ -1,5 +1,3 @@
-﻿#Script will take screenshots of devices in IP.txt and save them to the C:Desktop\Screenshots
-
 write-host @"  
 
 
@@ -11,22 +9,25 @@ write-host @"
 ███████║╚██████╗██║  ██║███████╗███████╗██║ ╚████║    ╚██████╔╝██║  ██║██║  ██║██████╔╝██████╔╝███████╗██║  ██║
 ╚══════╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝     ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
                                                                                                                
-            V1.4
+
            Written By: Anthony Tippy                                                                                                        
 
 "@
 
+#Stopwatch feature
+$stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+
 #Credentials
-$username = 'USERNAME HERE'
-$password = 'PASSWORD HERE'
+$username = 'USERNAME'
+$password = 'PASSWORD'
 
 #Import PSCRESTRON MODULE
 Import-Module PSCrestron
 
-$local = $PSScriptRoot
+$local = 
 
-#Stopwatch feature
-$stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+#Delete old Screenshot Folder
+Remove-Item ".\Desktop\Screenshots" -Recurse -ErrorAction SilentlyContinue
 
 #Create Screenshot folder
 New-Item -Path ".\Desktop" -Name "Screenshots" -ItemType "directory" -ErrorAction SilentlyContinue
@@ -50,6 +51,7 @@ Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
 
         #New Crestron Session
         $session = Open-CrestronSession -Device $d -secure
+        #Read-Host -Prompt “Crestron Session Connected Press Enter to exit`n"
 
         #Hostname Extraction
         $hostnameResponce = Invoke-CrestronSession $session "hostname"
@@ -62,10 +64,10 @@ Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
 
         $Remotefile = ('logs\' + $deviceHostname + '.bmp')
 
-        Get-FTPFile -Device $d -RemoteFile $Remotefile -localPath .\Desktop\Screenshots -erroraction Continue 
+        Get-FTPFile -Device $d -RemoteFile $Remotefile -localPath .\Desktop\Screenshots -port 22 -erroraction Continue 
 
         #Cleanup -Remove Screenshot from device
-        $cleanup = Remove-FTPFile -device $d -RemoteFile $Remotefile -secure -erroraction Continue
+        $cleanup = Remove-FTPFile -device $d -RemoteFile $Remotefile -secure -port 22 -erroraction Continue
 
         #Close Crestron Session
         Close-CrestronSession $session
@@ -77,7 +79,7 @@ Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
         $DeviceResultItem = New-Object PSObject
 
         #New Crestron Session
-        $session = Open-CrestronSession -Device $d -secure -Username $username -Password $password
+        $session = Open-CrestronSession -Device $d -secure #-Username $username -Password $password
 
         #Hostname Extraction
         $hostnameResponce = Invoke-CrestronSession $session "hostname"
@@ -90,10 +92,10 @@ Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
 
         $Remotefile = ('logs\' + $deviceHostname + '.bmp')
 
-        Get-FTPFile -Device $d -RemoteFile $Remotefile -localPath .\Desktop\Screenshots -secure -Username $username -Password $password -erroraction Continue 
+        Get-FTPFile -Device $d -RemoteFile $Remotefile -localPath .\Desktop\Screenshots -secure 
 
         #Cleanup -Remove Screenshot from device
-        $cleanup = Remove-FTPFile -device $d -RemoteFile $Remotefile -secure -Username $username -Password $password -erroraction continue
+        $cleanup = Remove-FTPFile -device $d -RemoteFile $Remotefile -secure 
 
         #Close Crestron Session
         Close-CrestronSession $session
