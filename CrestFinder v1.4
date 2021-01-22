@@ -11,7 +11,7 @@ write-host @"
 ╚██████╗██║  ██║███████╗███████║   ██║   ██║     ██║██║ ╚████║██████╔╝███████╗██║  ██║
  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   ╚═╝     ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝
                                                                                       
-
+    v1.4
     Written By: Anthony Tippy
 
 
@@ -20,57 +20,72 @@ write-host @"
 
                                                                                                                                                            
 "@
+#Stopwatch feature
+$stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+
+#Credentials
+$username = 'USERNAME'
+$password = 'PASSWORD'
+
 
 # make sure the PSCrestron Cmdlets are loaded into PowerShell
 Import-Module PSCrestron
 
-#Reset Count
-$count = 0
-
-#Stopwatch feature
-$stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+#Delete old fILES
+Remove-Item ".\Desktop\CrestFinder Results.csv" -ErrorAction SilentlyContinue
+Remove-Item ".\Desktop\CrestFinder Results SORTED.csv" -ErrorAction SilentlyContinue
 
 # declare an object to hold the results table
 $ResultsTable =@()
 
+$outputpath = ".\Desktop\CrestFinder Results.csv"
 
 #load IP from TXT list
-$deviceList = Get-Content (Join-Path $PSScriptRoot 'IP.txt')
+$devs = Get-Content (Join-Path $PSScriptRoot 'IP.txt')
 
+#Run Autodiscovery in parallel processes
+Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
+    try {
+        $d = $_
+        $DeviceResultItem = New-Object PSObject
 
-# for each device in the devicelist
-foreach ($dev in $deviceList) {
+        Write-host -f Green  "Discovering : $d`n"
 
-        #Device Discovery for each IP in text file
-        write-host $dev 'Trying Autodiscovery'
-        $dVersionInfo = Read-AutoDiscovery $dev  -ErrorAction "SilentlyContinue"
-        write-host " " 
+        $DeviceResultItem = Read-AutoDiscovery $d  -secure -ErrorAction "SilentlyContinue"
 
-        #Update Counter for each device
-        $count = $count + 1
+        #Add line to the report
+        $DeviceResultsData = $DeviceResultItem
 
-        # Add entry to the table
-        #-----------------------
-        $ResultsTable += $dVersionInfo
+        $DeviceResultsData | export-csv -Path (".\Desktop\CrestFinder Results.csv") -NoTypeInformation -Append
+        }
+    Catch {
+        Try{
+        Write-host -f green "Discovering : $d`n"
+
+        $DeviceResultItem = Read-AutoDiscovery $d -secure -username $username -password $password -ErrorAction "SilentlyContinue"
+
+        #Add line to the report
+        $DeviceResultsData = $DeviceResultItem
+
+        $DeviceResultsData | export-csv -Path (".\Desktop\CrestFinder Results.csv") -NoTypeInformation -Append
+        }
+
+        Catch{
+        write-host -f Red "$d Unable to connect`n`n"
+        #$d | export-csv -Path (".\Desktop\CrestFinder Results.csv") -NoTypeInformation -Append
+        }
 
         }
-    
 
-#Gridview Output
-$ResultsTable | Out-GridView
+ }-ThrottleLimit 50  -ShowProgress
 
-#Output RAW TXT file
-$ResultsTable | Out-File (Join-Path $PSScriptRoot 'Device Discovery RAW Output.txt')
+ #Remove Duplicate Entries
+Import-Csv (".\Desktop\CrestFinder Results.csv") | sort IP –Unique | export-csv ".\Desktop\CrestFinder Results SORTED.csv" -NoTypeInformation -Force
 
-#Output to Formatted CSV
-$ResultsTable | Select-Object -Property "Device", "IP", "Hostname", "Description"| Export-Csv -Path $PSScriptRoot\"CrestFinder Results.csv" -NoTypeInformation
-
-write-host "Outputted csv file WILL contain duplicates!!  Don't forget to remove duplicates in excel!!!"
-
-#Report Count of Devices
-write-host 'Total Devices Queried: ' $count
+#Delete Unneeded Duplicate Raw Output File
+Remove-Item ".\Desktop\CrestFinder Results.csv" -ErrorAction SilentlyContinue
 
 #Total time of script
 $stopwatch
 
-#Read-Host -Prompt “Press Enter to exit”
+Read-Host -Prompt “Press Enter to exit”
