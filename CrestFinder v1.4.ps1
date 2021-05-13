@@ -1,3 +1,35 @@
+
+<#
+.SYNOPSIS
+  Script will connect to crestron devices from ip list and find other devices that they can beacon out to.
+
+.DESCRIPTION
+  CrestFinder IP Scanner intiates device discovery for each device in the IP.txt device list.  Script will gather info about Crestron devices.
+  If no adjacent devices are found outside of host Crestron device, script will gather host device info and add it to list. When all device info has been gathered,
+  script removes any possible duplicate IP addresses and exports to C:\Desktop\CrestFinder Results SORTED.csv.
+
+.PARAMETER <Parameter_Name>
+  None
+
+.INPUTS
+  - $username = 'ENTER YOUR USERNAME' 
+  - $password = 'ENTER PASSWORD'
+  - IP.txt text file containing IP addresses of devices (One per line)
+
+.OUTPUTS
+  Results can be found at C:\Desktop\CrestFinder Results SORTED.csv
+
+.NOTES
+  Version:        1.6
+  Author:         Anthony Tippy
+  Creation Date:  05/13/2021
+  Purpose/Change: Updates
+  
+.EXAMPLE
+  Modify username/password variables --> enter IP addresses into IP.txt file --> Run Script--> script will output found and sorted devices to  C:\Desktop\CrestFinder Results SORTED.csv
+#>
+
+
 ###Crestron Device Discovery Script
 ###Script will call IP addresses from list and gather device information via autodiscovery 
 write-host @"  
@@ -11,11 +43,8 @@ write-host @"
 ╚██████╗██║  ██║███████╗███████║   ██║   ██║     ██║██║ ╚████║██████╔╝███████╗██║  ██║
  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝   ╚═╝     ╚═╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝
                                                                                       
-    v1.4
+    v1.6
     Written By: Anthony Tippy
-
-
-
 
 
                                                                                                                                                            
@@ -23,51 +52,59 @@ write-host @"
 #Stopwatch feature
 $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
 
-#Credentials
-$username = 'USERNAME'
-$password = 'PASSWORD'
-
+if (Get-Module -ListAvailable -Name PSCrestron) {
+} 
+else {
+    Write-Host "PSCrestron Module Not Installed. Please Install PSCrestron Module and Try Again!"
+    exit
+}
 
 # make sure the PSCrestron Cmdlets are loaded into PowerShell
 Import-Module PSCrestron
 
 #Delete old fILES
-Remove-Item ".\Desktop\CrestFinder Results.csv" -ErrorAction SilentlyContinue
-Remove-Item ".\Desktop\CrestFinder Results SORTED.csv" -ErrorAction SilentlyContinue
+Remove-Item "$home\Desktop\CrestFinder Results.csv" -ErrorAction SilentlyContinue
+Remove-Item "$home\Desktop\CrestFinder Results SORTED.csv" -ErrorAction SilentlyContinue
 
-# declare an object to hold the results table
-$ResultsTable =@()
-
-$outputpath = ".\Desktop\CrestFinder Results.csv"
 
 #load IP from TXT list
-$devs = Get-Content (Join-Path $PSScriptRoot 'IP.txt')
+$devs = @(Get-Content (Join-Path $PSScriptRoot 'IP.txt'))
 
 #Run Autodiscovery in parallel processes
 Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
+
+        #Credentials
+        $username = 'USERNAME HERE'
+        $password = 'PASSWORD HERE'
     try {
         $d = $_
+
         $DeviceResultItem = New-Object PSObject
 
-        Write-host -f Green  "Discovering : $d`n"
+        Write-host -f Green "[AutoDiscovery Default Password] Working on => $d `n" 
 
-        $DeviceResultItem = Read-AutoDiscovery $d  -secure -ErrorAction "SilentlyContinue"
+        $DeviceResultItem = Read-AutoDiscovery $d  -secure -ErrorAction "SilentlyContinue" | Select-Object -Property Device, IP, Hostname, Description
+         
+        $DeviceResultItem | export-csv -Path "$home\Desktop\CrestFinder Results.csv" -NoTypeInformation -Append
 
-        #Add line to the report
-        $DeviceResultsData = $DeviceResultItem
-
-        $DeviceResultsData | export-csv -Path (".\Desktop\CrestFinder Results.csv") -NoTypeInformation -Append
+        if (([string]::IsNullOrEmpty($DeviceResultItem)))
+            {write-host -f yellow "$d - Initial Discovery Did Not Find Any Other Devices --> Grabbing Device Info`n"
+            $result = Get-AutoDiscovery -endpoint $d | Select-Object -Property Device, IP, Hostname, Description | Export-Csv -Path "$home\Desktop\CrestFinder Results.csv" -NoTypeInformation -append
+            write-host $result}
         }
     Catch {
         Try{
-        Write-host -f green "Discovering : $d`n"
 
-        $DeviceResultItem = Read-AutoDiscovery $d -secure -username $username -password $password -ErrorAction "SilentlyContinue"
+        Write-host -f Green "[AutoDiscovery Custom Password] Working on => $d `n" 
 
-        #Add line to the report
-        $DeviceResultsData = $DeviceResultItem
+        $DeviceResultItem = Read-AutoDiscovery $d -secure -username $username -password $password -ErrorAction "SilentlyContinue" | Select-Object -Property Device, IP, Hostname, Description
 
-        $DeviceResultsData | export-csv -Path (".\Desktop\CrestFinder Results.csv") -NoTypeInformation -Append
+        $DeviceResultItem | export-csv -Path "$home\Desktop\CrestFinder Results.csv" -NoTypeInformation -Append
+
+        if (([string]::IsNullOrEmpty($DeviceResultItem)))
+            {write-host -f yellow "$d - Initial Discovery Did Not Find Any Other Devices --> Grabbing Device Info`n"
+            $result = Get-AutoDiscovery -endpoint $d | Select-Object -Property Device, IP, Hostname, Description | Export-Csv -Path "$home\Desktop\CrestFinder Results.csv" -NoTypeInformation -append
+            write-host $result}
         }
 
         Catch{
@@ -77,13 +114,18 @@ Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
 
         }
 
- }-ThrottleLimit 50  -ShowProgress
+ } -throttlelimit 30 -ShowProgress
+ 
 
  #Remove Duplicate Entries
-Import-Csv (".\Desktop\CrestFinder Results.csv") | sort IP –Unique | export-csv ".\Desktop\CrestFinder Results SORTED.csv" -NoTypeInformation -Force
+Import-Csv "$home\Desktop\CrestFinder Results.csv" | sort IP –Unique | export-csv "$home\Desktop\CrestFinder Results SORTED.csv" -NoTypeInformation -Force
 
 #Delete Unneeded Duplicate Raw Output File
-Remove-Item ".\Desktop\CrestFinder Results.csv" -ErrorAction SilentlyContinue
+Remove-Item "$home\Desktop\CrestFinder Results.csv" -ErrorAction SilentlyContinue
+
+import-csv "$home\Desktop\CrestFinder Results SORTED.csv" | out-gridview -Title "Total Discovered Devices"
+
+Write-host -f Cyan "`n`nResults can be found at C:\Desktop\CrestFinder Results SORTED.csv"
 
 #Total time of script
 $stopwatch
