@@ -1,3 +1,31 @@
+<#
+.SYNOPSIS
+  Script will grab screenshots of Crestron touch panels (TSW series)
+
+.DESCRIPTION
+  Script connects to each touchpanel on the IP.txt file and issues the screenshot command.  Screenshot is named according to the hostname of the panel.
+  Screenshot is then extracted from the panel to the C:\Desktop\Screenshots folder.  Script is capable of running on up to 32 devices simultaneously.
+
+.PARAMETER <Parameter_Name>
+    none
+
+.INPUTS
+  - $username = 'ENTER YOUR USERNAME' 
+  - $password = 'ENTER PASSWORD'
+  - IP.txt text file containing IP addresses of devices (One per line)
+
+.OUTPUTS
+  C:\Desktop\Screenshots
+
+.NOTES
+  Version:        1.5
+  Author:         Anthony Tippy
+  Creation Date:  05/25/2021
+  Purpose/Change: Fix bugs with passwords
+  
+.EXAMPLE
+  Modify username/password variables --> enter IP addresses into IP.txt file --> screenshot should be saved to C:\Desktop\Screenshots folder
+#>
 write-host @"  
 
 
@@ -16,10 +44,6 @@ write-host @"
 
 #Stopwatch feature
 $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
-
-#Credentials
-$username = 'USERNAME'
-$password = 'PASSWORD'
 
 #Import PSCRESTRON MODULE
 Import-Module PSCrestron
@@ -45,6 +69,14 @@ catch
 
 #Version
 Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
+
+########### Credentials ###########
+
+$username = 'USERNAME'
+$password = 'PASSWORD'
+
+###################################
+
     try {
         $d = $_
         $DeviceResultItem = New-Object PSObject
@@ -79,7 +111,7 @@ Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
         $DeviceResultItem = New-Object PSObject
 
         #New Crestron Session
-        $session = Open-CrestronSession -Device $d -secure #-Username $username -Password $password
+        $session = Open-CrestronSession -Device $d -secure -Username $username -Password $password
 
         #Hostname Extraction
         $hostnameResponce = Invoke-CrestronSession $session "hostname"
