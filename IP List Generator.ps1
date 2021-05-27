@@ -42,4 +42,13 @@ Write-host "DONE!`n"
 
 $total | Out-File (Join-Path $PSScriptRoot "ip scan.txt")
 
+$i=0
+
+$devs =@(Get-Content -Path (Join-Path $PSScriptRoot 'ip scan.txt'))
+$count = 0
+foreach ($d in $devs){
+$count += 1}
+
+Write-host -f green "`n`n$count Total IP addresses written to $PSScriptRoot \ip scan.txt`n`n"
+
 Read-Host -Prompt “Press Enter to exit”
