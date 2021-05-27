@@ -1,4 +1,4 @@
-﻿### Crestron Parallel SuperScript V1.4
+﻿### Crestron Parallel SuperScript V1.5
 ###Script will call IP addresses from list and gather device information as well as program and DHCP state data
 #YOU MUST FILL OUT THE PROPER USERNAME/PASSWORD BEFORE RUNNING
 
@@ -20,7 +20,7 @@ write-host @"
 ███████║╚██████╔╝██║     ███████╗██║  ██║███████║╚██████╗██║  ██║██║██║        ██║   
 ╚══════╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   
                                                                                      
-    V1.4                                                    
+    V1.5                                                    
     Written By: Anthony Tippy
 
 
@@ -30,9 +30,6 @@ write-host @"
 #Create IP.txt File if not there
 New-Item -Path . -Name "IP.txt" -ItemType "file" -ErrorAction SilentlyContinue
 
-#Credentials
-$username = 'USERNAME HERE'
-$password = 'PASSWORD HERE'
 
 #Import PSCRESTRON MODULE
 Import-Module PSCrestron
@@ -61,6 +58,15 @@ catch
 #Version
 Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
 $DeviceResultItem = New-Object PSObject
+
+########### Credentials ###########
+
+$username = 'USERNAME HERE'
+$password = 'PASSWORD HERE'
+
+###################################
+
+
     try {
         $d = $_ 
         $session = Open-CrestronSession -Device $d -Secure -ErrorAction Continue
