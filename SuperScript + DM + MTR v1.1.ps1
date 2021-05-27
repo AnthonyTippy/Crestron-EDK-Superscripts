@@ -51,7 +51,7 @@ write-host @"
 ███████║╚██████╔╝██║     ███████╗██║  ██║███████║╚██████╗██║  ██║██║██║        ██║   
 ╚══════╝ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   
                                                                                      
-    v1.1                                                    
+    v1.2                                                    
     Written By: Anthony Tippy
 
 
@@ -67,10 +67,6 @@ else {
     Write-Host "PSCrestron Module Not Installed. Please Install PSCrestron Module and Try Again!"
     exit
 }
-
-#Credentials
-$username = 'USERNAME HERE'
-$password = 'PASSWORD HERE'
 
 #Import PSCRESTRON MODULE
 Import-Module PSCrestron
@@ -100,6 +96,14 @@ catch
 #Superscript processing
 Invoke-RunspaceJob -InputObject $devs -ScriptBlock {
 $DeviceResultItem = New-Object PSObject
+
+########### Credentials ###########
+
+$username = 'USERNAME HERE'
+$password = 'PASSWORD HERE'
+
+###################################
+
     try {
         $d = $_ 
         $session = Open-CrestronSession -Device $d -Secure -ErrorAction Continue
