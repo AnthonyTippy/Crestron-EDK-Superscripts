@@ -1,6 +1,33 @@
-﻿### Crestron Parallel SuperScript V1.5
+<#
+.SYNOPSIS
+  Asyncronously connects to devices and grabs Crestron device information such as model, serial number, mac address, and project file...etc
+
+.DESCRIPTION
+  Superscript will connect to up to 30 devices simultaneously to grab the associated device information from the device.
+
+
+.PARAMETER <Parameter_Name>
+    none
+
+.INPUTS
+  - $username = 'ENTER YOUR USERNAME' 
+  - $password = 'ENTER PASSWORD'
+  - IP.txt text file containing IP addresses of devices (One per line)
+
+.OUTPUTS
+  C:\Desktop\Superscript Results.csv
+
+.NOTES
+  Version:        1.5
+  Author:         Anthony Tippy
+  Creation Date:  05/25/2021
+  Purpose/Change: added singular credential variable input
+  
+.EXAMPLE
+  Modify username/password variables --> enter IP addresses into IP.txt file --> Run Superscript--> script will output device info C:\Desktop\Superscript Results.csv
+#>
+
 ###Script will call IP addresses from list and gather device information as well as program and DHCP state data
-#YOU MUST FILL OUT THE PROPER USERNAME/PASSWORD BEFORE RUNNING
 
 write-host @"  
 
