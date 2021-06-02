@@ -1,0 +1,3 @@
+Some useful shortcuts:
+CTRL+SHIFT+B adds the cue names to all signals on a symbol.
+CTRL+SHIFT+H adds the underlying join numbers to the symbol.

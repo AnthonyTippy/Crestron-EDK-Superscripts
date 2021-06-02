@@ -1,0 +1,2 @@
+& $Env:WinDir\system32\inetsrv\appcmd.exe set config /section:staticContent /-"[fileExtension='.c3p']"
+& $Env:WinDir\system32\inetsrv\appcmd.exe set config /section:staticContent /+"[fileExtension='.c3p',mimeType='application/octet-stream']"
