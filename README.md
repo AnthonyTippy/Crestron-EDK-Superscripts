@@ -76,6 +76,33 @@ DHCP Killer is a script to automate the process of turning off DHCP and setting 
 - script disables DHCP
 - Your device should have the same IP address it started with, but set to static
 
+
+# UC-ENGINE Superscript 
+
+.SYNOPSIS
+  Asyncronously connects to UC-Engine and grabs windows Get-ComputerInfo details as well as connected devices, information about the touchpanel connected, and other various device info.
+
+.INPUTS
+  - $username = 'ENTER YOUR USERNAME' 
+  - $password = 'ENTER PASSWORD'
+  - $cusername = 'ENTER YOUR USERNAME'  #Crestron Device Username (Touchpanel)
+  - $cpassword = 'ENTER PASSWORD' #Crestron Device Password (Touchpanel)
+  - IP.txt text file containing IP addresses of devices (One per line)
+
+. REQUIREMENTS
+    -Run script as admin
+    -Each UC-Engine MUST have PSRemoting enabled (To enable: Run Powershell as administrator ON UC ENGINE ==> Issue the command "Enable-PSRemoting -SkipNetworkProfileCheck")
+    -PSCrestron module must be installed (Crestron EDK)
+    -IP.txt file for IP's
+
+.OUTPUTS
+  C:\MTR  Results.csv
+  
+.EXAMPLE
+  Modify BOTH SETS of username/password variables (Line 97) --> enter UC-ENGINE IP addresses into IP.txt file --> Run Script--> script will output device info to C:\MTR  Results.csv
+
+
+
 # More information about the crestron powershell module
 https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/Modules/CrestronSession-Module.htm
 https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/PSCrestron.htm#Get-VersionInfo
