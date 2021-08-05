@@ -90,10 +90,10 @@ DHCP Killer is a script to automate the process of turning off DHCP and setting 
   - IP.txt text file containing IP addresses of devices (One per line)
 
 . REQUIREMENTS
-    -Run script as admin
-    -Each UC-Engine MUST have PSRemoting enabled (To enable: Run Powershell as administrator ON UC ENGINE ==> Issue the command "Enable-PSRemoting -SkipNetworkProfileCheck")
-    -PSCrestron module must be installed (Crestron EDK)
-    -IP.txt file for IP's
+  - Run script as admin
+  - Each UC-Engine MUST have PSRemoting enabled (To enable: Run Powershell as administrator ON UC ENGINE ==> Issue the command "Enable-PSRemoting -SkipNetworkProfileCheck")
+  - PSCrestron module must be installed (Crestron EDK)
+  - IP.txt file for IP's
 
 .OUTPUTS
   C:\MTR  Results.csv
