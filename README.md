@@ -115,8 +115,8 @@ DHCP Killer is a script to automate the process of turning off DHCP and setting 
   - IP.txt text file containing IP addresses of devices (One per line)
 
 . REQUIREMENTS
-    - PSCrestron module must be installed (Crestron EDK)
-    - IP.txt file for IP's
+  - PSCrestron module must be installed (Crestron EDK)
+  - IP.txt file for IP's
 
 .OUTPUTS
   C:\PortScan Results.csv
