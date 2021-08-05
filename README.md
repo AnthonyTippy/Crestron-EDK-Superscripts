@@ -102,6 +102,28 @@ DHCP Killer is a script to automate the process of turning off DHCP and setting 
   Modify BOTH SETS of username/password variables (Line 97) --> enter UC-ENGINE IP addresses into IP.txt file --> Run Script--> script will output device info to C:\MTR  Results.csv
 
 
+# CrestScanner - Crestron Port Scanner
+
+.SYNOPSIS
+  Asyncronously scans devices in IP.txt file across multiple ports. 
+
+.DESCRIPTION
+  Script will connect to up to 30 devices simultaneously scan for various open ports
+
+
+.INPUTS
+  - IP.txt text file containing IP addresses of devices (One per line)
+
+. REQUIREMENTS
+    - PSCrestron module must be installed (Crestron EDK)
+    - IP.txt file for IP's
+
+.OUTPUTS
+  C:\PortScan Results.csv
+  
+.EXAMPLE
+  Enter IP's to scan into IP.txt file in root script directory --> Run script --> Script will scan each device for common ports as well as Crestron specific ports
+
 
 # More information about the crestron powershell module
 https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/Modules/CrestronSession-Module.htm
