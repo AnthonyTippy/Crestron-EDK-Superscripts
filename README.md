@@ -1,13 +1,14 @@
-# Crestron-EDK-Superscript
-Crestron Powershell script to pull device information and issue commands to many devices on an IP list.  Once script has ran, it will export the data gathered out to a CSV file for consumption.
-
-This powershell script requires fairly little modification and can be used to gather information on hundreds of crestron devices on a network across multiple subnets.
-
 # Get-Started
 1. Download and install the Crestron Powershell EDK 
 -Non-Crestron Link: https://crestron-edk.software.informer.com/download/
 -Direct Crestron Link https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/Installation.htm
 
+
+# SuperScript
+Crestron Powershell script to pull device information and issue commands to many devices on an IP list.  Once script has ran, it will export the data gathered out to a CSV file for consumption.
+
+This powershell script requires fairly little modification and can be used to gather information on hundreds of crestron devices on a network across multiple subnets.
+1. Download the above module
 2. Set your username and password
 -$cUsername = "USERNAME"
 -$cPassword = "PASSWORD"
