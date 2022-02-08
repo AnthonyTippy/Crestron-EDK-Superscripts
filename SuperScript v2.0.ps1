@@ -141,7 +141,9 @@ $password = 'PASSWORD'
 
         #progcom
         $progcomResponce = Invoke-CrestronSession $session "progcom"
-        $programFileName =   [regex]::Match($progcomResponce, "([^Program File:\s])(.*?)(\.smw)").value 
+        $programFileName =   [regex]::Match($progcomResponce, "([^Program File:\s])(.*?)(\.smw)").value
+        $programFullFileName =   [regex]::Match($progcomResponce, "(?<=Source\sFile:\s\s)(.*)").value 
+
 
         #systemname
         $systename = [regex]::Match($progcomResponce, "(?<=System\sName:\s\s)(.*)").value 
@@ -229,6 +231,9 @@ $DeviceResultItem | Add-Member -Name "Uptime" -MemberType NoteProperty -Value $u
 $DeviceResultItem | Add-Member -Name "DHCP Status" -MemberType NoteProperty -Value $dDHCP
 # Table Coulumn 15 - Auth Method
 $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Value $authmethod
+# Table Coulumn 16 - Source Full File
+$DeviceResultItem | Add-Member -Name "Source Full File Path" -MemberType NoteProperty -Value $programFullFileName
+
 
 
 #Add line to the report
@@ -319,6 +324,8 @@ $DeviceResultItem | Add-Member -Name "Uptime" -MemberType NoteProperty -Value " 
 $DeviceResultItem | Add-Member -Name "DHCP Status" -MemberType NoteProperty -Value " "
 # Table Coulumn 15 - Auth Method
 $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Value "CS Device - $deviceHostname"
+# Table Coulumn 16 - Source Full File
+$DeviceResultItem | Add-Member -Name "Source Full File Path" -MemberType NoteProperty -Value $programFullFileName
 
 #Add line to the report
 $DeviceResultsData = $DeviceResultItem
@@ -410,6 +417,9 @@ $DeviceResultItem | Add-Member -Name "Uptime" -MemberType NoteProperty -Value " 
 $DeviceResultItem | Add-Member -Name "DHCP Status" -MemberType NoteProperty -Value " "
 # Table Coulumn 15 - Auth Method
 $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Value "Cresnet Device - $deviceHostname"
+# Table Coulumn 16 - Source Full File
+$DeviceResultItem | Add-Member -Name "Source Full File Path" -MemberType NoteProperty -Value " "
+
 
 #Add line to the report
 $DeviceResultsData = $DeviceResultItem
@@ -446,7 +456,9 @@ catch{write-host -f RED "$d - $hostname CRESNET ERROR!"}
         
         #progcom
         $progcomResponce = Invoke-CrestronSession $session "progcom"
-        $programFileName =   [regex]::Match($progcomResponce, "([^Program File:\s])(.*?)(\.smw)").value 
+        $programFileName =   [regex]::Match($progcomResponce, "([^Program File:\s])(.*?)(\.smw)").value
+        $programFullFileName =   [regex]::Match($progcomResponce, "(?<=Source\sFile:\s\s)(.*)").value 
+
 
         #systemname
         $systename = [regex]::Match($progcomResponce, "(?<=System\sName:\s\s)(.*)").value 
@@ -533,6 +545,9 @@ $DeviceResultItem | Add-Member -Name "Uptime" -MemberType NoteProperty -Value $u
 $DeviceResultItem | Add-Member -Name "DHCP Status" -MemberType NoteProperty -Value $dDHCP
 # Table Coulumn 15 - Auth Method
 $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Value $authmethod
+# Table Coulumn 16 - Source Full File
+$DeviceResultItem | Add-Member -Name "Source Full File Path" -MemberType NoteProperty -Value "$programFullFileName "
+
 
 
 #Add line to the report
@@ -620,6 +635,9 @@ $DeviceResultItem | Add-Member -Name "Uptime" -MemberType NoteProperty -Value " 
 $DeviceResultItem | Add-Member -Name "DHCP Status" -MemberType NoteProperty -Value " "
 # Table Coulumn 15 - Auth Method
 $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Value "CS Device - $deviceHostname"
+# Table Coulumn 16 - Source Full File
+$DeviceResultItem | Add-Member -Name "Source Full FIle Path" -MemberType NoteProperty -Value " "
+
 
 #Add line to the report
 $DeviceResultsData = $DeviceResultItem
@@ -712,6 +730,9 @@ $DeviceResultItem | Add-Member -Name "Uptime" -MemberType NoteProperty -Value " 
 $DeviceResultItem | Add-Member -Name "DHCP Status" -MemberType NoteProperty -Value " "
 # Table Coulumn 15 - Auth Method
 $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Value "Cresnet Device - $deviceHostname"
+# Table Coulumn 16 - Source Full File
+$DeviceResultItem | Add-Member -Name "Source Full File Path" -MemberType NoteProperty -Value " "
+
 
 #Add line to the report
 $DeviceResultsData = $DeviceResultItem
@@ -758,6 +779,9 @@ catch{write-host -f RED "$d - $hostname CRESNET ERROR!"}
             $DeviceResultItem | Add-Member -Name "DHCP Status" -MemberType NoteProperty -Value " "#$dDHCP
             # Table Coulumn 15 - Auth Method
             $DeviceResultItem | Add-Member -Name "Auth Method" -MemberType NoteProperty -Value "Error Connecting"
+	    # Table Coulumn 16 - Source Full File
+            $DeviceResultItem | Add-Member -Name "Source Full File Path" -MemberType NoteProperty -Value " "#$programFullFileName
+
 
 
             #Add line to the report
