@@ -1,8 +1,6 @@
 # Get-Started/Installation
 1. Download and install the Crestron Powershell EDK 
 
-   -[Non-Crestron Link](Https://crestron-edk.software.informer.com/download)
-
    -[Direct Crestron Link](https://sdkcon78221.crestron.com/sdk/Crestron_EDK_SDK/Content/Topics/Installation)
 
 2.  Download this repository or individual scripts you'd like to run
